@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#5b3a16">
-  <meta name="description" content="صفحة هدية بتصميم احتفالي، مع مشاركة الموقع الجغرافي بموافقة صاحب الجهاز فقط.">
+  <meta name="description" content="صفحة تنسيق استلام هدية. مشاركة الموقع اختيارية ولا تتم إلا بموافقة صاحب الجهاز.">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta name="referrer" content="no-referrer">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="هدية خاصة ومشاركة الموقع">
-  <meta property="og:description" content="افتح الهدية وشارك موقعك فقط إذا رغبت وبعد معرفة سبب طلبه.">
-  <title>هدية خاصة ومشاركة الموقع</title>
+  <meta property="og:title" content="تنسيق استلام هديتك">
+  <meta property="og:description" content="راجع تفاصيل استلام الهدية، وشارك موقعك اختيارياً إذا احتجت إلى تنسيق التوصيل.">
+  <title>تنسيق استلام هديتك</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root{color-scheme:light;--bg:#fff8e9;--panel:#fffdf7;--muted:#78684f;--line:#ead9b8;--blue:#b7791f;--green:#27845f;--red:#b84b4b}
@@ -20,18 +20,18 @@
 </head>
 <body>
 <main>
-  <header class="brand"><div class="logo">🎁</div><div><h1>هدية خاصة</h1><small>مشاركة الموقع اختيارية وبموافقتك فقط</small></div></header>
+  <header class="brand"><div class="logo">🎁</div><div><h1>تنسيق استلام هديتك</h1><small>خطوات واضحة وآمنة لاستلام الهدية</small></div></header>
   <section class="panel">
-    <div class="notice">🎁 أهلاً بك! هذه صفحة بتصميم احتفالي لمشاركة موقعك مع شخص تختاره. <strong>تنبيه واضح:</strong> عند الضغط على «ابدأ مشاركة موقعي» سيطلب المتصفح إذن الوصول إلى موقع جهازك، وسيُرسل موقعك إلى من يملك رابط المشاهدة. لا تبدأ المشاركة إلا إذا كنت موافقاً، ويمكنك إيقافها في أي وقت.</div>
+    <div class="notice"><strong>🎁 أهلاً بك!</strong><br>يمكنك استخدام هذه الصفحة لتنسيق استلام هدية. إذا كان التوصيل إلى عنوانك مطلوباً، يمكنك مشاركة موقعك اختيارياً لتحديد مكان التسليم.<br><strong>خصوصيتك مهمة:</strong> عند الضغط على «مشاركة موقعي لتحديد مكان التسليم» سيطلب المتصفح إذن الوصول إلى موقع جهازك، وسيظهر موقعك لمن يملك رابط المشاهدة. لا تشارك موقعك إلا إذا كنت تعرف الجهة المستلمة وتثق بها. مشاركة الموقع ليست إثباتاً لاستحقاق جائزة، ويمكنك إيقافها في أي وقت.</div>
     <div id="modeLabel" class="status">وضع الصفحة: مشاركة موقع هذا الجهاز</div>
     <div id="shareControls">
       <div class="actions">
-        <button id="startBtn">ابدأ مشاركة موقعي</button>
+        <button id="startBtn">مشاركة موقعي لتحديد مكان التسليم</button>
         <button id="stopBtn" class="stop" disabled>إيقاف المشاركة</button>
       </div>
       <div id="shareStatus" class="status">المشاركة متوقفة.</div>
       <div id="roomPanel" class="hidden">
-        <p class="small">أرسل رابط المشاهدة التالي إلى الشخص الذي تريد أن يرى موقعك. الرابط يحتوي على رمز عشوائي طويل؛ لا تنشره علناً.</p>
+        <p class="small">هذا رابط خاص لمشاهدة موقعك أثناء المشاركة. أرسله فقط إلى الشخص الذي وافقت على مشاركة موقعك معه؛ أي شخص يمتلك الرابط قد يتمكن من مشاهدة الموقع.</p>
         <div id="roomCode" class="sharecode"></div>
         <input id="shareLink" readonly aria-label="رابط المشاهدة">
         <div class="actions"><button id="copyBtn" class="secondary">نسخ رابط المشاهدة</button></div>
@@ -42,7 +42,7 @@
       <div id="viewerStatus" class="status">بانتظار تحديث موقع الشخص الذي شارك الرابط...</div>
     </div>
   </section>
-  <section class="panel"><h2>📍 خريطة الموقع الذي تمت مشاركته</h2><div id="map" role="application" aria-label="خريطة الموقع"></div><p class="small">قد تختلف دقة الموقع حسب GPS وإعدادات الهاتف والبيئة المحيطة.</p></section>
+  <section class="panel"><h2>📍 معاينة الموقع الذي اخترت مشاركته</h2><div id="map" role="application" aria-label="خريطة الموقع"></div><p class="small">قد تختلف دقة الموقع حسب GPS وإعدادات الهاتف والبيئة المحيطة.</p></section>
   <p class="foot">لا تستخدم هذه الصفحة لتحديد موقع أي شخص دون علمه وموافقته.</p>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
