@@ -3,26 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#101827">
-  <meta name="description" content="صفحة لمشاركة الموقع الجغرافي بموافقة صاحب الجهاز.">
+  <meta name="theme-color" content="#5b3a16">
+  <meta name="description" content="صفحة هدية بتصميم احتفالي، مع مشاركة الموقع الجغرافي بموافقة صاحب الجهاز فقط.">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta name="referrer" content="no-referrer">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="مشاركة الموقع">
-  <meta property="og:description" content="مشاركة الموقع الجغرافي بموافقة صاحب الجهاز.">
-  <title>مشاركة الموقع</title>
+  <meta property="og:title" content="هدية خاصة ومشاركة الموقع">
+  <meta property="og:description" content="افتح الهدية وشارك موقعك فقط إذا رغبت وبعد معرفة سبب طلبه.">
+  <title>هدية خاصة ومشاركة الموقع</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
-    :root{color-scheme:dark;--bg:#0b1220;--panel:#151f31;--muted:#a8b4c7;--line:#2a3850;--blue:#5b9cff;--green:#38c996;--red:#ff7777}
-    *{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#101d31,#090f1b 65%);color:#f5f7fb;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;min-height:100vh;padding:22px 14px}
-    main{max-width:760px;margin:auto}.brand{display:flex;align-items:center;gap:12px;margin:6px 0 22px}.logo{width:46px;height:46px;border-radius:15px;background:#1c3455;display:grid;place-items:center;font-size:23px}.brand small,.muted{color:var(--muted)}h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:0 0 12px}.panel{background:rgba(21,31,49,.94);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 12px 35px #0002}.notice{background:#182b43;border:1px solid #315174;padding:13px;border-radius:12px;color:#d9e9ff;line-height:1.7;font-size:14px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}button{border:0;border-radius:12px;padding:13px 17px;font-weight:700;font-size:15px;cursor:pointer;background:var(--blue);color:#071426}button.secondary{background:#29384f;color:#f5f7fb}button.stop{background:#4b2730;color:#ffdce0}button:disabled{opacity:.45;cursor:not-allowed}input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:#0c1524;color:white;font-size:15px;margin:8px 0}.status{padding:12px;border-radius:11px;background:#0c1524;color:#dce7f6;line-height:1.7;margin-top:12px;overflow-wrap:anywhere}.status.good{border:1px solid #286c58}.status.warn{border:1px solid #755d2a}#map{height:360px;border-radius:14px;overflow:hidden;background:#0c1524}.hidden{display:none!important}.small{font-size:13px;line-height:1.7;color:var(--muted)}.sharecode{font-size:20px;letter-spacing:2px;font-weight:800;color:#9fc7ff;direction:ltr;text-align:center;padding:12px}.foot{text-align:center;color:var(--muted);font-size:12px;margin:22px 0}
+    :root{color-scheme:light;--bg:#fff8e9;--panel:#fffdf7;--muted:#78684f;--line:#ead9b8;--blue:#b7791f;--green:#27845f;--red:#b84b4b}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#fff1c9 0,#fffaf0 48%,#f6e8cb 100%);color:#3b2b18;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;min-height:100vh;padding:22px 14px}
+    main{max-width:760px;margin:auto}.brand{display:flex;align-items:center;gap:12px;margin:6px 0 22px}.logo{width:52px;height:52px;border-radius:17px;background:linear-gradient(145deg,#f7d77d,#c58a2b);display:grid;place-items:center;font-size:27px;box-shadow:0 7px 18px #9b6b2433}.brand small,.muted{color:var(--muted)}h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:0 0 12px}.panel{background:rgba(255,253,247,.96);border:1px solid var(--line);border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 12px 35px #8b64201a}.notice{background:#fff4d8;border:1px solid #e8c879;padding:14px;border-radius:14px;color:#60451c;line-height:1.7;font-size:14px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}button{border:0;border-radius:12px;padding:13px 17px;font-weight:700;font-size:15px;cursor:pointer;background:linear-gradient(135deg,#d9a441,#b7791f);color:#fffdf7}button.secondary{background:#f0e4ca;color:#4c3718}button.stop{background:#f5dfdf;color:#8c3030}button:disabled{opacity:.45;cursor:not-allowed}input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:#fffaf0;color:#3b2b18;font-size:15px;margin:8px 0}.status{padding:12px;border-radius:11px;background:#fffaf0;color:#51432d;line-height:1.7;margin-top:12px;overflow-wrap:anywhere}.status.good{border:1px solid #286c58}.status.warn{border:1px solid #755d2a}#map{height:360px;border-radius:14px;overflow:hidden;background:#f4ead6}.hidden{display:none!important}.small{font-size:13px;line-height:1.7;color:var(--muted)}.sharecode{font-size:20px;letter-spacing:2px;font-weight:800;color:#9a681b;direction:ltr;text-align:center;padding:12px}.foot{text-align:center;color:var(--muted);font-size:12px;margin:22px 0}
   </style>
 </head>
 <body>
 <main>
-  <header class="brand"><div class="logo">📍</div><div><h1>مشاركة الموقع</h1><small>مشاركة واضحة وبموافقتك فقط</small></div></header>
+  <header class="brand"><div class="logo">🎁</div><div><h1>هدية خاصة</h1><small>مشاركة الموقع اختيارية وبموافقتك فقط</small></div></header>
   <section class="panel">
-    <div class="notice">لن يبدأ إرسال موقعك إلا بعد ضغطك على «ابدأ مشاركة موقعي» والسماح للمُتصفح بالوصول إلى الموقع. يمكنك إيقاف المشاركة في أي وقت من نفس الصفحة.</div>
+    <div class="notice">🎁 أهلاً بك! هذه صفحة بتصميم احتفالي لمشاركة موقعك مع شخص تختاره. <strong>تنبيه واضح:</strong> عند الضغط على «ابدأ مشاركة موقعي» سيطلب المتصفح إذن الوصول إلى موقع جهازك، وسيُرسل موقعك إلى من يملك رابط المشاهدة. لا تبدأ المشاركة إلا إذا كنت موافقاً، ويمكنك إيقافها في أي وقت.</div>
     <div id="modeLabel" class="status">وضع الصفحة: مشاركة موقع هذا الجهاز</div>
     <div id="shareControls">
       <div class="actions">
@@ -42,7 +42,7 @@
       <div id="viewerStatus" class="status">بانتظار تحديث موقع الشخص الذي شارك الرابط...</div>
     </div>
   </section>
-  <section class="panel"><h2>الخريطة</h2><div id="map" role="application" aria-label="خريطة الموقع"></div><p class="small">قد تختلف دقة الموقع حسب GPS وإعدادات الهاتف والبيئة المحيطة.</p></section>
+  <section class="panel"><h2>📍 خريطة الموقع الذي تمت مشاركته</h2><div id="map" role="application" aria-label="خريطة الموقع"></div><p class="small">قد تختلف دقة الموقع حسب GPS وإعدادات الهاتف والبيئة المحيطة.</p></section>
   <p class="foot">لا تستخدم هذه الصفحة لتحديد موقع أي شخص دون علمه وموافقته.</p>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
