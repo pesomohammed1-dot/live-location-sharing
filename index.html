@@ -41,14 +41,17 @@
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script type="module">
-  // لإكمال المشاركة بين جهازين: أنشئ مشروع Firebase ثم ضع بيانات Web App هنا.
+  // إعدادات تطبيق Firebase Web. أضف databaseURL بعد إنشاء Realtime Database.
   // لا تضع مفاتيح خدمة إدارية أو كلمات مرور في هذا الملف.
   const firebaseConfig = {
-    apiKey: "PASTE_FIREBASE_API_KEY",
-    authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://PASTE_PROJECT_ID-default-rtdb.firebaseio.com",
-    projectId: "PASTE_PROJECT_ID",
-    appId: "PASTE_FIREBASE_APP_ID"
+    apiKey: "AIzaSyBXuD7D0ZFbJHj38Jj9GiWgAG4E0Vnn5x8",
+    authDomain: "live-location-sharing-3fe64.firebaseapp.com",
+    databaseURL: "PASTE_DATABASE_URL",
+    projectId: "live-location-sharing-3fe64",
+    storageBucket: "live-location-sharing-3fe64.firebasestorage.app",
+    messagingSenderId: "79616209296",
+    appId: "1:79616209296:web:1741481fbdbd8a5c5bc315",
+    measurementId: "G-C2BKYC6VZM"
   };
 
   const map = L.map('map').setView([30.0444,31.2357],6);
@@ -71,7 +74,7 @@
   function setStatus(id,msg,good=false){$(id).textContent=msg;$(id).className='status'+(good?' good':'');}
   let firebaseModules=null;
   async function connectFirebase(){
-    if(!configured) throw new Error('لم يتم إعداد قاعدة البيانات بعد. نحتاج ربط Firebase أولاً.');
+    if(!configured) throw new Error('يلزم إنشاء Realtime Database ثم إضافة رابطها في إعدادات التطبيق.');
     if(!firebaseModules){
       const [app,auth,database]=await Promise.all([
         import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'),
@@ -140,7 +143,7 @@
     catch(e){$('shareLink').select();document.execCommand('copy');$('copyBtn').textContent='تم النسخ';}
   });
   if(!configured){
-    setStatus('shareStatus','الواجهة جاهزة، لكن مشاركة الموقع بين جهازين لم تُفعّل بعد. يلزم إعداد Firebase وربط بياناته هنا.');
+    setStatus('shareStatus','تم ربط إعدادات التطبيق. تبقّى إنشاء Realtime Database وإضافة رابطها لتفعيل المشاركة بين جهازين.');
   }
   window.addEventListener('pagehide',()=>{if(watchId!==null)navigator.geolocation.clearWatch(watchId);});
 </script>
