@@ -1,110 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>مشاركة موقعي</title>
-
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-<style>
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #101820;
-  color: white;
-  padding: 15px;
-}
-button {
-  padding: 14px 22px;
-  margin: 8px;
-  border: 0;
-  border-radius: 9px;
-  font-size: 17px;
-}
-#map {
-  height: 400px;
-  border-radius: 12px;
-  margin-top: 20px;
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>مشاركة الموقع بموافقتك</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root{color-scheme:dark;--bg:#0b1220;--panel:#151f31;--muted:#a8b4c7;--line:#2a3850;--blue:#5b9cff;--green:#38c996;--red:#ff7777}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#101d31,#090f1b 65%);color:#f5f7fb;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;min-height:100vh;padding:22px 14px}
+    main{max-width:760px;margin:auto}.brand{display:flex;align-items:center;gap:12px;margin:6px 0 22px}.logo{width:46px;height:46px;border-radius:15px;background:#1c3455;display:grid;place-items:center;font-size:23px}.brand small,.muted{color:var(--muted)}h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:0 0 12px}.panel{background:rgba(21,31,49,.94);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 12px 35px #0002}.notice{background:#182b43;border:1px solid #315174;padding:13px;border-radius:12px;color:#d9e9ff;line-height:1.7;font-size:14px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}button{border:0;border-radius:12px;padding:13px 17px;font-weight:700;font-size:15px;cursor:pointer;background:var(--blue);color:#071426}button.secondary{background:#29384f;color:#f5f7fb}button.stop{background:#4b2730;color:#ffdce0}button:disabled{opacity:.45;cursor:not-allowed}input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:#0c1524;color:white;font-size:15px;margin:8px 0}.status{padding:12px;border-radius:11px;background:#0c1524;color:#dce7f6;line-height:1.7;margin-top:12px;overflow-wrap:anywhere}.status.good{border:1px solid #286c58}.status.warn{border:1px solid #755d2a}#map{height:360px;border-radius:14px;overflow:hidden;background:#0c1524}.hidden{display:none!important}.small{font-size:13px;line-height:1.7;color:var(--muted)}.sharecode{font-size:20px;letter-spacing:2px;font-weight:800;color:#9fc7ff;direction:ltr;text-align:center;padding:12px}.foot{text-align:center;color:var(--muted);font-size:12px;margin:22px 0}
+  </style>
 </head>
-
 <body>
-
-<h2>مشاركة موقعي الجغرافي</h2>
-
-<p>لن تتم مشاركة موقعك إلا بعد موافقتك.</p>
-
-<button onclick="startSharing()">موافقة ومشاركة موقعي</button>
-<button onclick="stopSharing()">إيقاف المشاركة</button>
-
-<p id="status">المشاركة متوقفة</p>
-<div id="map"></div>
-
+<main>
+  <header class="brand"><div class="logo">📍</div><div><h1>مشاركة الموقع</h1><small>مشاركة واضحة وبموافقتك فقط</small></div></header>
+  <section class="panel">
+    <div class="notice">لن يبدأ إرسال موقعك إلا بعد ضغطك على «ابدأ مشاركة موقعي» والسماح للمُتصفح بالوصول إلى الموقع. يمكنك إيقاف المشاركة في أي وقت من نفس الصفحة.</div>
+    <div id="modeLabel" class="status">وضع الصفحة: مشاركة موقع هذا الجهاز</div>
+    <div id="shareControls">
+      <div class="actions">
+        <button id="startBtn">ابدأ مشاركة موقعي</button>
+        <button id="stopBtn" class="stop" disabled>إيقاف المشاركة</button>
+      </div>
+      <div id="shareStatus" class="status">المشاركة متوقفة.</div>
+      <div id="roomPanel" class="hidden">
+        <p class="small">أرسل رابط المشاهدة التالي إلى الشخص الذي تريد أن يرى موقعك. الرابط يحتوي على رمز عشوائي طويل؛ لا تنشره علناً.</p>
+        <div id="roomCode" class="sharecode"></div>
+        <input id="shareLink" readonly aria-label="رابط المشاهدة">
+        <div class="actions"><button id="copyBtn" class="secondary">نسخ رابط المشاهدة</button></div>
+      </div>
+    </div>
+    <div id="viewerControls" class="hidden">
+      <p class="small">أنت في وضع المشاهدة. لن يتم تحديد موقع جهازك.</p>
+      <div id="viewerStatus" class="status">بانتظار تحديث موقع الشخص الذي شارك الرابط...</div>
+    </div>
+  </section>
+  <section class="panel"><h2>الخريطة</h2><div id="map" role="application" aria-label="خريطة الموقع"></div><p class="small">قد تختلف دقة الموقع حسب GPS وإعدادات الهاتف والبيئة المحيطة.</p></section>
+  <p class="foot">لا تستخدم هذه الصفحة لتحديد موقع أي شخص دون علمه وموافقته.</p>
+</main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module">
+  // لإكمال المشاركة بين جهازين: أنشئ مشروع Firebase ثم ضع بيانات Web App هنا.
+  // لا تضع مفاتيح خدمة إدارية أو كلمات مرور في هذا الملف.
+  const firebaseConfig = {
+    apiKey: "PASTE_FIREBASE_API_KEY",
+    authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://PASTE_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: "PASTE_PROJECT_ID",
+    appId: "PASTE_FIREBASE_APP_ID"
+  };
 
-<script>
-const map = L.map('map').setView([30.0444, 31.2357], 6);
+  const map = L.map('map').setView([30.0444,31.2357],6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors'}).addTo(map);
+  let marker=null,watchId=null,db=null,roomRef=null,unsubscribe=null;
+  const $=id=>document.getElementById(id);
+  const params=new URLSearchParams(location.search);
+  const room=params.get('room');
+  const configured=!Object.values(firebaseConfig).some(v=>v.startsWith('PASTE_'));
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
- attribution: '&copy; OpenStreetMap'
-}).addTo(map);
-
-let marker;
-let watchId = null;
-
-function startSharing() {
-  if (!navigator.geolocation) {
-    document.getElementById('status').textContent =
-      'المتصفح لا يدعم تحديد الموقع';
-    return;
+  function showPoint(lat,lng,label){
+    const p=[lat,lng]; map.setView(p,16);
+    if(marker) marker.setLatLng(p); else marker=L.marker(p).addTo(map);
+    marker.bindPopup(label||'الموقع الذي تمت مشاركته').openPopup();
   }
-
-  if (watchId !== null) return;
-
-  document.getElementById('status').textContent =
-    'جاري تحديد موقعك...';
-
-  watchId = navigator.geolocation.watchPosition(
-    function(position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-
-      document.getElementById('status').textContent =
-        'موقعك الحالي: ' + lat.toFixed(5) + ', ' + lng.toFixed(5);
-
-      map.setView([lat, lng], 16);
-
-      if (marker) {
-        marker.setLatLng([lat, lng]);
-      } else {
-        marker = L.marker([lat, lng]).addTo(map);
-      }
-    },
-    function(error) {
-      document.getElementById('status').textContent =
-        'تعذر تحديد الموقع. تأكد من السماح بإذن الموقع.';
-    },
-    {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: 15000
+  function randomRoom(){
+    const bytes=new Uint8Array(16); crypto.getRandomValues(bytes);
+    return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function setStatus(id,msg,good=false){$(id).textContent=msg;$(id).className='status'+(good?' good':'');}
+  let firebaseModules=null;
+  async function connectFirebase(){
+    if(!configured) throw new Error('لم يتم إعداد قاعدة البيانات بعد. نحتاج ربط Firebase أولاً.');
+    if(!firebaseModules){
+      const [app,auth,database]=await Promise.all([
+        import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js'),
+        import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js')
+      ]);
+      const instance=app.initializeApp(firebaseConfig);
+      const authInstance=auth.getAuth(instance);
+      await auth.signInAnonymously(authInstance);
+      firebaseModules={auth,database,db:database.getDatabase(instance)};
     }
-  );
-}
-
-function stopSharing() {
-  if (watchId !== null) {
-    navigator.geolocation.clearWatch(watchId);
-    watchId = null;
+    return firebaseModules;
   }
 
-  document.getElementById('status').textContent =
-    'تم إيقاف مشاركة الموقع';
-}
-</script>
+  if(room){
+    $('modeLabel').textContent='وضع الصفحة: مشاهدة موقع تمت مشاركته معك';
+    $('shareControls').classList.add('hidden'); $('viewerControls').classList.remove('hidden');
+    (async()=>{
+      try{
+        const f=await connectFirebase();
+        const ref=f.database.ref(f.db,'sharedLocations/'+room);
+        unsubscribe=f.database.onValue(ref,snap=>{
+          const value=snap.val();
+          if(!value){setStatus('viewerStatus','لم يصل موقع بعد، أو انتهت المشاركة.');return;}
+          if(value.active===false){setStatus('viewerStatus','أوقف صاحب الموقع المشاركة.');return;}
+          showPoint(value.lat,value.lng,'الموقع الذي تمت مشاركته');
+          const when=value.updatedAt?new Date(value.updatedAt).toLocaleString('ar-EG'):'';
+          setStatus('viewerStatus','آخر تحديث: '+when+' — الدقة التقريبية: '+Math.round(value.accuracy||0)+' متر',true);
+        },err=>setStatus('viewerStatus','تعذر قراءة المشاركة: '+err.message));
+      }catch(e){setStatus('viewerStatus',e.message+' افتح إعدادات المشروع لإكمال الربط.');}
+    })();
+  }
 
+  $('startBtn').addEventListener('click',async()=>{
+    if(!navigator.geolocation){setStatus('shareStatus','متصفحك لا يدعم تحديد الموقع.');return;}
+    if(watchId!==null)return;
+    try{
+      const f=await connectFirebase();
+      const roomId=randomRoom();
+      roomRef=f.database.ref(f.db,'sharedLocations/'+roomId);
+      $('roomCode').textContent=roomId;
+      $('shareLink').value=location.origin+location.pathname+'?room='+roomId;
+      $('roomPanel').classList.remove('hidden');
+      $('startBtn').disabled=true;
+      setStatus('shareStatus','تم تجهيز رابط المشاركة. في انتظار إذن الموقع...',true);
+      watchId=navigator.geolocation.watchPosition(async pos=>{
+        const data={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,updatedAt:Date.now(),active:true};
+        try{await f.database.set(roomRef,data);showPoint(data.lat,data.lng,'موقعك الحالي');setStatus('shareStatus','موقعك يُشارك الآن. استخدم زر الإيقاف لإنهاء المشاركة.',true);}
+        catch(e){setStatus('shareStatus','تعذر إرسال الموقع: '+e.message);}
+      },err=>{
+        setStatus('shareStatus','لم نتمكن من تحديد الموقع: '+err.message);
+        if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
+        $('startBtn').disabled=false;
+      },{enableHighAccuracy:true,maximumAge:5000,timeout:20000});
+      $('stopBtn').disabled=false;
+    }catch(e){setStatus('shareStatus',e.message);}
+  });
+  $('stopBtn').addEventListener('click',async()=>{
+    if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
+    $('stopBtn').disabled=true;$('startBtn').disabled=false;
+    if(roomRef&&firebaseModules){try{await firebaseModules.database.update(roomRef,{active:false,updatedAt:Date.now()});}catch(e){}}
+    setStatus('shareStatus','تم إيقاف مشاركة الموقع. يمكنك إغلاق الصفحة الآن.',true);
+  });
+  $('copyBtn').addEventListener('click',async()=>{
+    try{await navigator.clipboard.writeText($('shareLink').value);$('copyBtn').textContent='تم النسخ';}
+    catch(e){$('shareLink').select();document.execCommand('copy');$('copyBtn').textContent='تم النسخ';}
+  });
+  if(!configured){
+    setStatus('shareStatus','الواجهة جاهزة، لكن مشاركة الموقع بين جهازين لم تُفعّل بعد. يلزم إعداد Firebase وربط بياناته هنا.');
+  }
+  window.addEventListener('pagehide',()=>{if(watchId!==null)navigator.geolocation.clearWatch(watchId);});
+</script>
 </body>
 </html>
