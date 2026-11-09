@@ -24,8 +24,9 @@ GitHub Pages يستضيف ملفات ثابتة ولا يرسل البريد و�
 2. أنشئ Email Template واجعل **To Email** ثابتاً على بريدك أنت، وليس قيمة يكتبها الزائر.
 3. أضف المتغيرات التالية في القالب: `{{room_link}}`, `{{recipient_name}}`, `{{latitude}}`, `{{longitude}}`, `{{accuracy}}`, `{{maps_link}}`, `{{started_at}}`.
 4. انسخ Service ID وTemplate ID وPublic Key.
-5. في `index.html` ابحث عن `emailConfig` واستبدل `YOUR_EMAILJS_SERVICE_ID` و`YOUR_EMAILJS_TEMPLATE_ID` و`YOUR_EMAILJS_PUBLIC_KEY` بالقيم الحقيقية.
-6. احفظ التعديل على فرع `main`؛ GitHub Actions يعيد النشر تلقائياً.
+5. الكود الحالي يستخدم Service ID بالقيمة `service_6sirvcc` وTemplate ID بالقيمة `template_ttechpb`، ويستخدم Public Key الموجود في `index.html`. إذا تغير أي منها، حدّث القيمة المطابقة في استدعاء `emailjs.send`.
+6. تأكد أن محتوى قالب EmailJS نفسه يعرض المتغيرات التالية، وإلا قد تصل رسالة عامة دون بيانات الموقع: `{{room_link}}`, `{{latitude}}`, `{{longitude}}`, `{{accuracy}}`, `{{maps_link}}`, `{{started_at}}`. واجعل خانة **To Email** ثابتة على بريدك أنت.
+7. احفظ التعديل على فرع `main`؛ ثم تحقق من نجاح نشر GitHub Pages من تبويب Actions.
 
 لا تضع كلمة مرور بريدك أو EmailJS Private Key في كود الموقع. معرفات EmailJS الثلاثة المستخدمة هنا مخصصة للعميل، واجعل المستلم ثابتاً في القالب.
 
