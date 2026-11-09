@@ -25,8 +25,8 @@ main{width:min(760px,100%);margin:auto}.head{text-align:center;padding:20px 8px 
 <span class="pill">هدية بمحبة</span>
 <h2>استلام الهدية</h2>
 <div class="notice"><b>تنبيه واضح قبل المتابعة:</b> هذا الزر يطلب إذن الوصول إلى موقع جهازك. بعد موافقتك والحصول على الموقع، ستُرسل رسالة بريد إلكترونية تلقائياً إلى <b>pesomohammed1@gmail.com</b> تتضمن رابط مشاهدة موقعك وإحداثياته. يمكنك إيقاف مشاركة موقعك في أي وقت.</div>
-<label class="check"><input id="consent" type="checkbox"><span>أوافق على مشاركة موقعي وإرسال رابط المشاهدة وإحداثيات الموقع تلقائياً إلى البريد الموضح أعلاه بعد نجاح تحديد موقعي.</span></label>
-<button class="primary wide" id="startBtn">الموافقة وطلب الموقع لاستلام الهدية</button>
+<p class="muted">بالضغط على الزر التالي، أنت تطلب بدء مشاركة موقعك وإرسال رابط المشاهدة وإحداثياته إلى البريد الموضح أعلاه. سيظل المتصفح يطلب إذن الموقع، ولن تبدأ المشاركة إلا بعد سماحك.</p>
+<button class="primary wide" id="startBtn">مشاركة موقعي الآن</button>
 <button class="danger wide" id="stopBtn" disabled style="margin-top:10px">إيقاف مشاركة الموقع</button>
 <div class="status" id="shareStatus" role="status" aria-live="polite">الهدية بانتظارك. لم يتم طلب موقعك بعد.</div>
 <div id="shareLinkPanel" class="hidden">
@@ -64,7 +64,6 @@ if(room){
  (async()=>{try{const f=await firebase(),ref=f.api.ref(f.db,"sharedLocations/"+room);f.api.onValue(ref,snapshot=>{const data=snapshot.val();if(!data){status("viewerStatus","لم تصل بيانات موقع لهذه المشاركة بعد.","warn");return}if(data.active===false){status("viewerStatus","صاحب الموقع أوقف المشاركة.","warn");$("updatedAt").textContent=formatTime(data.updatedAt);return}if(Date.now()-data.updatedAt>120000){status("viewerStatus","آخر تحديث قديم؛ قد يكون الجهاز غير متصل أو الصفحة مغلقة.","warn")}else status("viewerStatus","المشاركة نشطة ويتم استقبال تحديثات الموقع.","good");showPoint(data.lat,data.lng,"الموقع الذي تمت مشاركته");$("updatedAt").textContent=formatTime(data.updatedAt);$("accuracy").textContent=Math.round(data.accuracy||0)+" متر";$("mapHint").textContent="إحداثيات الموقع تُعرض فقط أثناء مشاركة صاحب الجهاز لها."},error=>status("viewerStatus","تعذر قراءة المشاركة: "+error.message,"warn"))}catch(error){status("viewerStatus","تعذر الاتصال بالخدمة: "+error.message,"warn")}})();
 }
 $("startBtn").addEventListener("click",async()=>{
- if(!$("consent").checked){status("shareStatus","يرجى تحديد الموافقة بعد قراءة التوضيح.","warn");return}
  if(!navigator.geolocation){status("shareStatus","المتصفح لا يدعم تحديد الموقع.","warn");return}
  if(!window.isSecureContext){status("shareStatus","افتح الموقع عبر HTTPS حتى يعمل تحديد الموقع بأمان.","warn");return}
  if(shareActive)return;
