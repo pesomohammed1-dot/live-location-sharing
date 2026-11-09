@@ -33,7 +33,7 @@ main{width:min(760px,100%);margin:auto}.head{text-align:center;padding:20px 8px 
 <p class="muted">هذا رابط مشاهدة موقعك المباشر. بعد أول تحديث ناجح للموقع، تُرسل رسالة تلقائياً إلى البريد المحدد. أي شخص يحصل على الرابط قد يستطيع مشاهدة المشاركة.</p>
 <label class="field" for="shareLink">رابط مشاهدة الموقع</label>
 <input class="linkbox" id="shareLink" readonly>
-<div class="actions"><button class="secondary" id="copyBtn">نسخ الرابط</button></div>
+<div class="actions"><button class="secondary" id="copyBtn">نسخ الرابط</button><button class="secondary hidden" id="retryEmailBtn">إعادة إرسال البريد</button></div>
 </div>
 </section>
 <section class="panel hidden" id="viewerPanel">
@@ -52,7 +52,7 @@ const $=id=>document.getElementById(id);
 const params=new URLSearchParams(location.search),room=params.get("room");
 const map=L.map("map").setView([30.0444,31.2357],6);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
-let marker=null,watchId=null,fbApi=null,shareRef=null,shareActive=false,emailSent=false;
+let marker=null,watchId=null,fbApi=null,shareRef=null,shareActive=false,emailSent=false,emailAttempted=false,lastPoint=null;
 function status(id,message,kind){const el=$(id);el.textContent=message;el.className="status"+(kind?" "+kind:"")}
 function showPoint(lat,lng,label){const point=[lat,lng];map.setView(point,16);if(marker)marker.setLatLng(point);else marker=L.marker(point).addTo(map);marker.bindPopup(label)}
 function makeRoom(){const bytes=crypto.getRandomValues(new Uint8Array(16));return Array.from(bytes,x=>x.toString(16).padStart(2,"0")).join("")}
@@ -73,44 +73,43 @@ $("startBtn").addEventListener("click",async()=>{
   const f=await firebase(),id=makeRoom();shareRef=f.api.ref(f.db,"sharedLocations/"+id);
   const url=new URL(location.href);url.searchParams.set("room",id);$("shareLink").value=url.toString();$("shareLinkPanel").classList.remove("hidden");
   status("shareStatus","تم إنشاء رابط خاص. في انتظار موافقتك على نافذة الموقع في المتصفح...");
+  await f.api.onDisconnect(shareRef).update({active:false,updatedAt:Date.now()});
   watchId=navigator.geolocation.watchPosition(async position=>{
    const point={lat:position.coords.latitude,lng:position.coords.longitude,accuracy:position.coords.accuracy,updatedAt:Date.now(),active:true};
+   lastPoint=point;
    try{
     await f.api.set(shareRef,point);
     shareActive=true;$("stopBtn").disabled=false;showPoint(point.lat,point.lng,"موقعك الحالي");$("mapHint").textContent="أنت تشارك موقعك حالياً.";
-    if(!emailSent){
-     emailSent=true;
-     status("shareStatus","تم حفظ موقعك. جارٍ إرسال رسالة البريد تلقائياً...","warn");
-     try{
-      const emailjs=(await import("https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm")).default;
-      const mapsLink="https://www.google.com/maps?q="+encodeURIComponent(point.lat+","+point.lng);
-      await emailjs.send("service_6sirvcc","template_ttechpb",{
-       room_link:$("shareLink").value,
-       recipient_name:"",
-       latitude:String(point.lat),
-       longitude:String(point.lng),
-       accuracy:String(Math.round(point.accuracy||0)),
-       maps_link:mapsLink,
-       started_at:new Date(point.updatedAt).toLocaleString("ar-EG")
-      },{publicKey:"zdsXpJ6teuY23xJ1E"});
-      status("shareStatus","تم إرسال رسالة الموقع تلقائياً إلى pesomohammed1@gmail.com بنجاح. مشاركة الموقع مستمرة ويمكنك إيقافها في أي وقت.","good");
-     }catch(mailError){
-      emailSent=false;
-      status("shareStatus","موقعك يُشارك، لكن تعذر إرسال البريد تلقائياً: "+(mailError?.text||mailError?.message||"خطأ غير معروف")+". تحقق من إعداد قالب EmailJS ثم أعد المحاولة بعد تحديث الصفحة.","warn");
-     }
-    }else status("shareStatus","موقعك يُشارك الآن. تم إرسال إشعار البريد مرة واحدة لهذه المشاركة.","good");
+    if(!emailSent&&!emailAttempted){
+     emailAttempted=true;
+     await sendLocationEmail(point);
+    }else if(emailSent){
+     status("shareStatus","موقعك يُشارك الآن. تم إرسال إشعار البريد مرة واحدة لهذه المشاركة.","good");
+    }
    }
    catch(error){status("shareStatus","تعذر حفظ تحديث الموقع: "+error.message,"warn")}
-  },error=>{status("shareStatus","لم يتم الحصول على الموقع: "+error.message,"warn");stopLocal()}, {enableHighAccuracy:true,maximumAge:5000,timeout:20000});
-  await f.api.onDisconnect(shareRef).update({active:false,updatedAt:Date.now()});
+  },async error=>{status("shareStatus","لم يتم الحصول على الموقع: "+error.message,"warn");stopLocal();if(shareRef&&fbApi){try{await fbApi.api.update(shareRef,{active:false,updatedAt:Date.now()})}catch(_){}}}, {enableHighAccuracy:true,maximumAge:5000,timeout:20000});
  }catch(error){status("shareStatus","تعذر بدء المشاركة: "+error.message,"warn");$("startBtn").disabled=false}
 });
 function stopLocal(){if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null}shareActive=false;$("stopBtn").disabled=true;$("startBtn").disabled=false}
+async function sendLocationEmail(point){
+ try{
+  const emailjs=(await import("https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm")).default;
+  const mapsLink="https://www.google.com/maps?q="+encodeURIComponent(point.lat+","+point.lng);
+  await emailjs.send("service_6sirvcc","template_ttechpb",{room_link:$("shareLink").value,recipient_name:"",latitude:String(point.lat),longitude:String(point.lng),accuracy:String(Math.round(point.accuracy||0)),maps_link:mapsLink,started_at:new Date(point.updatedAt).toLocaleString("ar-EG")},{publicKey:"zdsXpJ6teuY23xJ1E"});
+  emailSent=true;$("retryEmailBtn").classList.add("hidden");
+  status("shareStatus","تم إرسال رسالة الموقع تلقائياً إلى pesomohammed1@gmail.com بنجاح. مشاركة الموقع مستمرة ويمكنك إيقافها في أي وقت.","good");
+ }catch(mailError){
+  $("retryEmailBtn").classList.remove("hidden");
+  status("shareStatus","موقعك يُشارك، لكن تعذر إرسال البريد: "+(mailError?.text||mailError?.message||"خطأ غير معروف")+". يمكنك إعادة المحاولة بالزر الظاهر.","warn");
+ }
+}
 $("stopBtn").addEventListener("click",async()=>{
  stopLocal();
  if(shareRef&&fbApi){try{await fbApi.api.update(shareRef,{active:false,updatedAt:Date.now()});status("shareStatus","تم إيقاف مشاركة الموقع.","good")}catch(error){status("shareStatus","توقف تحديد الموقع على هذا الجهاز، لكن تعذر تأكيد الإيقاف على الخادم: "+error.message,"warn")}}
  else status("shareStatus","تم إيقاف مشاركة الموقع.","good");
 });
+$("retryEmailBtn").addEventListener("click",async()=>{if(!lastPoint||emailSent)return;$("retryEmailBtn").disabled=true;$("retryEmailBtn").textContent="جارٍ الإرسال...";await sendLocationEmail(lastPoint);$("retryEmailBtn").disabled=false;$("retryEmailBtn").textContent="إعادة إرسال البريد"});
 $("copyBtn").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("shareLink").value);$("copyBtn").textContent="تم النسخ ✓"}catch(error){$("shareLink").select();document.execCommand("copy");$("copyBtn").textContent="تم النسخ ✓"}});
 
 window.addEventListener("pagehide",()=>{if(watchId!==null)navigator.geolocation.clearWatch(watchId)});
