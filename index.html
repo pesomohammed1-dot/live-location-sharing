@@ -63,7 +63,7 @@
 
   const map = L.map('map').setView([30.0444,31.2357],6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors'}).addTo(map);
-  let marker=null,watchId=null,db=null,roomRef=null,unsubscribe=null,emailSent=false;
+  let marker=null,watchId=null,db=null,roomRef=null,unsubscribe=null,emailSent=false,emailSending=false,emailLastAttempt=0;
   const $=id=>document.getElementById(id);
   const params=new URLSearchParams(location.search);
   const room=params.get('room');
@@ -130,7 +130,7 @@
       setStatus('shareStatus','تم تجهيز رابط المشاركة. في انتظار إذن الموقع...',true);
       watchId=navigator.geolocation.watchPosition(async pos=>{
         const data={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,updatedAt:Date.now(),active:true};
-        try{await f.database.set(roomRef,data);showPoint(data.lat,data.lng,'موقعك الحالي');if(!emailSent){setStatus('shareStatus','موقعك يُشارك الآن. جارٍ إرسال إشعار البريد مرة واحدة...',true);emailSent=true;try{await emailjs.send('service_6sirvcc','template_ttechpb',{location_link:$('shareLink').value,start_time:new Date(data.updatedAt).toLocaleString('ar-EG')},{publicKey:'zdsXpJ6teuY23xJ1E'});setStatus('shareStatus','تم إرسال رابط المشاهدة إلى البريد الإلكتروني المحدد بنجاح.',true);}catch(mailError){const detail=mailError?.text||mailError?.message||'خطأ غير معروف';setStatus('shareStatus','فشل إرسال إشعار البريد. سبب الخطأ: '+detail+' — لن تتم إعادة المحاولة تلقائياً لتجنب تكرار الرسائل.');}}}
+        try{await f.database.set(roomRef,data);showPoint(data.lat,data.lng,'موقعك الحالي');if(!emailSent&&!emailSending&&Date.now()-emailLastAttempt>=60000){emailSending=true;emailLastAttempt=Date.now();setStatus('shareStatus','موقعك يُشارك الآن. جارٍ إرسال إشعار البريد...',true);try{if(!window.emailjs)throw new Error('تعذر تحميل خدمة إرسال البريد. تحقق من اتصال الإنترنت ثم أعد المحاولة.');await emailjs.send('service_6sirvcc','template_ttechpb',{location_link:$('shareLink').value,start_time:new Date(data.updatedAt).toLocaleString('ar-EG')},{publicKey:'zdsXpJ6teuY23xJ1E'});emailSent=true;setStatus('shareStatus','تم إرسال رابط المشاهدة إلى البريد الإلكتروني المحدد بنجاح.',true);}catch(mailError){const detail=mailError?.text||mailError?.message||String(mailError)||'خطأ غير معروف';setStatus('shareStatus','فشل إرسال إشعار البريد. سبب الخطأ: '+detail+' — ستتم إعادة المحاولة بعد دقيقة إذا استمر الاتصال بالموقع.');}finally{emailSending=false;}}}
         catch(e){setStatus('shareStatus','تعذر إرسال الموقع: '+e.message);}
       },err=>{
         setStatus('shareStatus','لم نتمكن من تحديد الموقع: '+err.message);
