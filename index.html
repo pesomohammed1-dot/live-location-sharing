@@ -1,26 +1,95 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#704a2a"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>هدية صغيرة لك 🎁</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><style>
-:root{--ink:#422d20;--muted:#816c5a;--gold:#ad7537;--line:#ead8bd}*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:22px 14px;background:radial-gradient(ellipse at top,#f9e7c5,#fff9ef 55%,#f1dfc6);color:var(--ink);font-family:system-ui,Arial,sans-serif}main{max-width:740px;margin:auto}.top{text-align:center;padding:18px 8px}.mark{font-size:42px}.top h1{margin:8px 0;font-size:30px}.muted,.small{color:var(--muted);line-height:1.8}.panel{background:#fffdf8;border:1px solid var(--line);border-radius:23px;padding:22px;margin:15px 0;box-shadow:0 16px 42px #744b2012}.gift{text-align:center;padding:30px 20px}.gift .big{font-size:68px}.gift p{line-height:1.9;color:var(--muted)}button{border:0;border-radius:13px;padding:13px 18px;font-size:15px;font-weight:800;background:linear-gradient(135deg,#c58d45,#9c652c);color:white;cursor:pointer}button:disabled{opacity:.5}.full{width:100%}.secondary{background:#f2e6d2;color:#60452b}.stop{background:#f5e2e1;color:#923e42}.notice{background:#fff4df;border:1px solid #e8cb91;border-radius:15px;padding:15px;line-height:1.9;color:#63451f;font-size:14px;margin:14px 0}label{display:block;margin:12px 0 5px;color:var(--muted);font-size:13px}input[type=text]{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:#fffaf1;font-size:15px}.consent{display:flex;gap:10px;align-items:flex-start;line-height:1.8;font-size:14px}.consent input{margin-top:5px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.status{padding:12px;border-radius:12px;background:#fff9ef;border:1px solid #eee0ca;margin-top:12px;line-height:1.8;overflow-wrap:anywhere}.good{background:#f2fbf4;border-color:#9bc8ae}.hidden{display:none!important}.code{direction:ltr;text-align:center;font-weight:bold;overflow-wrap:anywhere;color:#956126;padding:10px}#map{height:340px;border-radius:15px}.foot{text-align:center;font-size:12px;color:var(--muted);line-height:1.8}
-</style></head><body><main><header class="top"><div class="mark">🎁</div><div class="small">A LITTLE SURPRISE</div><h1>فيه هدية صغيرة مستنياك</h1><p class="muted">لحظة لطيفة تبدأ بخطوة بسيطة ✨</p></header>
-<section class="panel gift" id="giftIntro"><div class="big">🎀</div><h2>افتح مفاجأتك</h2><p>اضغط للمتابعة. ستظهر لك تفاصيل التجربة قبل أي طلب لصلاحية الموقع.</p><button id="openGift" class="full">افتح الهدية</button><p class="small">خصوصيتك أولاً · موافقتك مطلوبة · تقدر توقف في أي وقت</p></section>
-<section class="panel hidden" id="sharePanel"><h2>🎁 مفاجأتك الرقمية</h2><div class="notice"><b>البريد الذي سيستقبل مشاركة الموقع تلقائيًا:</b><br><b dir="ltr">pesomohammed1@gmail.com</b><br><br><b>توضيح مهم قبل المتابعة:</b><br>هذه التجربة تتضمن مشاركة موقع هذا الجهاز مباشرة مع شخص تختاره. لن يبدأ تحديد الموقع أو إرساله إلا بعد موافقتك والضغط على زر البدء ثم سماحك للمتصفح. عند البدء سيصل إشعار إلى البريد الذي أعدّه صاحب الموقع، وقد يتضمن رابط المشاهدة وإحداثيات أول تحديث. لن تُرسل تحديثات مستمرة إلى البريد. يمكنك إيقاف المشاركة في أي وقت.</div>
-<div id="shareControls"><label for="recipientName">اسم صاحب الجهاز الذي يشارك موقعه</label><input id="recipientName" type="text" maxlength="80" value="pesomohammed1@gmail.com" readonly><label class="consent"><input id="shareConsent" type="checkbox"><span>قرأت التوضيح وأوافق على مشاركة موقعي المباشر وإرسال إشعار البدء إلى البريد المحدد لدى صاحب الموقع.</span></label><div class="actions"><button id="startBtn" class="full">أوافق وأبدأ مشاركة موقعي</button><button id="stopBtn" class="stop" disabled>إيقاف المشاركة</button></div><div id="shareStatus" class="status">لم تبدأ مشاركة الموقع.</div><div id="roomPanel" class="hidden"><p class="small">هذا رابط مشاهدة موقعك. أرسله فقط إلى الشخص الذي اخترته؛ أي شخص يحصل عليه قد يتمكن من المشاهدة.</p><div id="roomCode" class="code"></div><input id="shareLink" type="text" readonly><div class="actions"><button id="copyBtn" class="secondary">نسخ الرابط</button><button id="sendBtn" class="secondary">مشاركة الرابط</button></div></div></div><div id="viewerControls" class="hidden"><p class="small">وضع مشاهدة فقط؛ لن يتم تحديد موقع جهازك.</p><div id="viewerStatus" class="status">بانتظار الموقع...</div></div></section>
-<section class="panel"><h2>📍 خريطة الموقع</h2><div id="map"></div><p class="small">تعتمد الدقة على GPS وإعدادات الجهاز والبيئة المحيطة.</p></section><p class="foot">مشاركة الموقع اختيارية وتتطلب موافقة صاحب الجهاز. لا تشارك رابط المشاهدة علناً.</p></main>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script type="module">
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b2d">
+<meta name="description" content="مشاركة الموقع المباشر بموافقة صاحب الجهاز.">
+<meta name="referrer" content="no-referrer">
+<title>مشاركة موقعي المباشر</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#121e31;--panel2:#17263d;--line:#293b55;--text:#eef4ff;--muted:#a9b8ce;--blue:#66a9ff;--green:#48c78e;--red:#f07878}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#1d3555 0,transparent 55%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;padding:22px 14px}
+main{width:min(760px,100%);margin:auto}.head{text-align:center;padding:20px 8px 26px}.logo{width:58px;height:58px;margin:auto;border-radius:19px;background:#1c3555;display:grid;place-items:center;font-size:28px;border:1px solid #345477}.eyebrow{color:var(--blue);font-size:12px;letter-spacing:1.5px;margin-top:15px}.head h1{font-size:29px;margin:9px 0}.sub{color:var(--muted);line-height:1.9;margin:0 auto;max-width:540px}.panel{background:linear-gradient(145deg,#15243a,#101b2d);border:1px solid var(--line);border-radius:22px;padding:21px;margin:14px 0;box-shadow:0 18px 55px #0003}.panel h2{font-size:18px;margin:0 0 12px}.notice{background:#1b2d46;border:1px solid #355477;padding:14px;border-radius:14px;line-height:1.9;color:#dceaff;font-size:14px}.muted{color:var(--muted);line-height:1.8;font-size:14px}.field{display:block;margin:14px 0 8px;color:#c5d4e8;font-size:14px}.check{display:flex;align-items:flex-start;gap:10px;line-height:1.8;font-size:14px;margin:17px 0}.check input{width:18px;height:18px;accent-color:var(--blue);margin-top:4px;flex-shrink:0}button{border:0;border-radius:13px;padding:13px 17px;font:inherit;font-weight:750;cursor:pointer;transition:.15s}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:linear-gradient(135deg,#75b5ff,#478ce5);color:#071426}.secondary{background:#243750;color:#e8f2ff;border:1px solid #3a5270}.danger{background:#492a35;color:#ffdce1;border:1px solid #74404d}.wide{width:100%}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px}.actions button{flex:1}.status{padding:13px;border-radius:13px;background:#0c1727;border:1px solid var(--line);line-height:1.8;font-size:14px;margin-top:13px;overflow-wrap:anywhere}.status.good{border-color:#34795f;color:#b8f3d7;background:#10271f}.status.warn{border-color:#84683b;color:#ffe3ae;background:#2b2418}.hidden{display:none!important}.linkbox{width:100%;padding:12px;border-radius:11px;border:1px solid #3b5270;background:#0b1626;color:#cde2ff;direction:ltr;text-align:left;font-size:13px;margin-top:8px}.pill{display:inline-block;padding:5px 10px;border-radius:30px;background:#243750;color:#c8dcf8;font-size:12px;margin-bottom:12px}#map{height:350px;border-radius:15px;border:1px solid var(--line);overflow:hidden;background:#0b1626}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.meta div{padding:11px;background:#0d192a;border:1px solid var(--line);border-radius:12px}.meta small{display:block;color:var(--muted);margin-bottom:5px}.meta b{font-size:13px;overflow-wrap:anywhere}.foot{text-align:center;color:#8193ac;font-size:12px;line-height:1.9;padding:12px 8px 25px}a{color:#9bcaff}@media(max-width:520px){body{padding:12px 10px}.panel{padding:17px}.head h1{font-size:25px}#map{height:300px}.meta{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main>
+<header class="head">
+<div class="logo">📍</div><div class="eyebrow">LIVE LOCATION</div>
+<h1>مشاركة موقعي المباشر</h1>
+<p class="sub">شارك موقع جهازك مع شخص تختاره، وشاهد الموقع على الخريطة في الوقت الفعلي. أنت المتحكم في بدء المشاركة وإيقافها.</p>
+</header>
+<section class="panel" id="startPanel">
+<span class="pill">وضع مشاركة الموقع</span>
+<h2>ابدأ مشاركة موقعك</h2>
+<div class="notice"><b>الخصوصية أولاً:</b> لا نطلب موقعك إلا بعد موافقتك والضغط على زر البدء، ثم موافقتك على نافذة المتصفح. سيظهر رابط خاص لمشاركته مع الشخص الذي تختاره. أوقف المشاركة متى شئت.</div>
+<label class="check"><input id="consent" type="checkbox"><span>أفهم أن موقعي المباشر سيصبح متاحاً لمن أرسل إليه رابط المشاهدة، وأوافق على بدء المشاركة.</span></label>
+<button class="primary wide" id="startBtn">موافقة وبدء مشاركة موقعي</button>
+<button class="danger wide" id="stopBtn" disabled style="margin-top:10px">إيقاف مشاركة الموقع</button>
+<div class="status" id="shareStatus" role="status" aria-live="polite">المشاركة متوقفة. لم يتم طلب موقعك.</div>
+<div id="shareLinkPanel" class="hidden">
+<p class="muted">أرسل الرابط التالي فقط إلى الشخص الذي تريد أن يشاهد موقعك. أي شخص يحصل على الرابط قد يستطيع مشاهدة المشاركة.</p>
+<label class="field" for="shareLink">رابط المشاهدة الخاص</label>
+<input class="linkbox" id="shareLink" readonly>
+<div class="actions"><button class="secondary" id="copyBtn">نسخ الرابط</button><button class="secondary" id="sendBtn">إرسال الرابط</button></div>
+</div>
+</section>
+<section class="panel hidden" id="viewerPanel">
+<span class="pill">وضع المشاهدة</span><h2>الموقع الذي تمت مشاركته معك</h2>
+<p class="muted">هذه الصفحة تعرض الموقع الذي وافق صاحبه على مشاركته. لا تطلب هذه الصفحة موقع جهازك.</p>
+<div id="viewerStatus" class="status" role="status" aria-live="polite">جارٍ الاتصال...</div>
+<div class="meta"><div><small>آخر تحديث</small><b id="updatedAt">—</b></div><div><small>دقة الموقع التقريبية</small><b id="accuracy">—</b></div></div>
+</section>
+<section class="panel"><h2>الخريطة</h2><div id="map" aria-label="خريطة الموقع"></div><p class="muted" id="mapHint">ستظهر هنا بيانات الموقع بعد بدء المشاركة أو فتح رابط مشاهدة صالح.</p></section>
+<footer class="foot">المشاركة اختيارية وتتطلب موافقة صاحب الجهاز. لا تشارك رابط المشاهدة علناً. يجب إبقاء الصفحة مفتوحة والاتصال بالإنترنت لاستمرار تحديث الموقع.</footer>
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module">
 const firebaseConfig={apiKey:"AIzaSyBXuD7D0ZFbJHj38Jj9GiWgAG4E0Vnn5x",authDomain:"live-location-sharing-3fe64.firebaseapp.com",databaseURL:"https://live-location-sharing-3fe64-default-rtdb.firebaseio.com",projectId:"live-location-sharing-3fe64",storageBucket:"live-location-sharing-3fe64.firebasestorage.app",messagingSenderId:"79616209296",appId:"1:79616209296:web:1741481fbdbd8a5c5bc315"};
-// إعدادات EmailJS. يجب ضبط مستلم القالب ثابتاً على بريد صاحب الموقع.
-const emailConfig={serviceId:"service_jor0rdv",templateId:"template_ttechpb",publicKey:"zdsXpJ6teuY23xJ1E"};
-const $=id=>document.getElementById(id),room=new URLSearchParams(location.search).get("room"),map=L.map("map").setView([30.0444,31.2357],6);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
-let marker=null,watchId=null,roomRef=null,fm=null,mailSent=false;
-function msg(id,s,ok=false){$(id).textContent=s;$(id).className="status"+(ok?" good":"")}
-function show(lat,lng,label){let p=[lat,lng];map.setView(p,16);if(marker)marker.setLatLng(p);else marker=L.marker(p).addTo(map);marker.bindPopup(label).openPopup()}
-function newRoom(){let a=crypto.getRandomValues(new Uint8Array(16));return [...a].map(x=>x.toString(16).padStart(2,"0")).join("")}
-async function fb(){if(!fm){let [a,u,d]=await Promise.all([import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")]);let app=a.initializeApp(firebaseConfig);await u.signInAnonymously(u.getAuth(app));fm={d,db:d.getDatabase(app)}}return fm}
-async function sendMail(v){if(mailSent)return false;if(!Object.values(emailConfig).every(x=>x&&!x.startsWith("YOUR_"))){msg("shareStatus","مشاركة الموقع تعمل، لكن البريد لم يُفعّل بعد. أضف بيانات EmailJS في إعدادات المشروع.",true);return false}let p={service_id:emailConfig.serviceId,template_id:emailConfig.templateId,user_id:emailConfig.publicKey,template_params:{room_link:v.link,recipient_name:v.name||"غير محدد",latitude:v.lat,longitude:v.lng,accuracy:Math.round(v.accuracy),maps_link:"https://www.google.com/maps?q="+v.lat+","+v.lng,started_at:new Date().toLocaleString("ar-EG")}};let r=await fetch("https://api.emailjs.com/api/v1.0/email/send",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p)});if(!r.ok)throw Error("تعذر إرسال البريد ("+r.status+"). تحقق من إعدادات EmailJS.");mailSent=true;return true}
-if(room){$("giftIntro").classList.add("hidden");$("sharePanel").classList.remove("hidden");$("shareControls").classList.add("hidden");$("viewerControls").classList.remove("hidden");(async()=>{try{let f=await fb(),ref=f.d.ref(f.db,"sharedLocations/"+room);f.d.onValue(ref,s=>{let v=s.val();if(!v){msg("viewerStatus","لا توجد بيانات بعد.");return}if(v.active===false){msg("viewerStatus","أوقف صاحب الموقع المشاركة.");return}if(Date.now()-v.updatedAt>600000){msg("viewerStatus","آخر تحديث أقدم من 10 دقائق؛ قد يكون الجهاز غير متصل.");return}show(v.lat,v.lng,"الموقع الذي تمت مشاركته");msg("viewerStatus","آخر تحديث: "+new Date(v.updatedAt).toLocaleString("ar-EG")+" · الدقة: "+Math.round(v.accuracy||0)+" متر",true)})}catch(e){msg("viewerStatus","تعذر فتح المشاركة: "+e.message)}})()}
-$("openGift").onclick=()=>{$("giftIntro").classList.add("hidden");$("sharePanel").classList.remove("hidden");setTimeout(()=>map.invalidateSize(),100)};
-$("startBtn").onclick=async()=>{if(!$("shareConsent").checked){msg("shareStatus","يرجى تأكيد موافقتك بعد قراءة التوضيح.");return}if(!navigator.geolocation){msg("shareStatus","متصفحك لا يدعم تحديد الموقع.");return}if(watchId!==null)return;$("startBtn").disabled=true;try{let f=await fb(),id=newRoom();roomRef=f.d.ref(f.db,"sharedLocations/"+id);$("roomCode").textContent=id;$("shareLink").value=location.origin+location.pathname+"?room="+id;$("roomPanel").classList.remove("hidden");await f.d.onDisconnect(roomRef).set({active:false,updatedAt:Date.now()});msg("shareStatus","تم تجهيز الرابط. وافق على طلب الموقع من المتصفح...",true);watchId=navigator.geolocation.watchPosition(async pos=>{let v={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,updatedAt:Date.now(),active:true};try{await f.d.set(roomRef,v);show(v.lat,v.lng,"موقعك الحالي");msg("shareStatus","موقعك يُشارك الآن. يمكنك إيقافه في أي وقت.",true);if(!mailSent){try{if(await sendMail({lat:v.lat,lng:v.lng,accuracy:v.accuracy,link:$("shareLink").value,name:$("recipientName").value.trim()}))msg("shareStatus","بدأت المشاركة ووصل إشعار البدء إلى البريد المحدد.",true)}catch(e){msg("shareStatus","بدأت المشاركة لكن فشل إشعار البريد: "+e.message)}}}catch(e){msg("shareStatus","تعذر حفظ الموقع: "+e.message)}},err=>{msg("shareStatus","تعذر تحديد الموقع: "+err.message);if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null}$("startBtn").disabled=false},{enableHighAccuracy:true,maximumAge:5000,timeout:20000});$("stopBtn").disabled=false}catch(e){msg("shareStatus","تعذر بدء الخدمة: "+e.message);$("startBtn").disabled=false}};
-$("stopBtn").onclick=async()=>{if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null}$("stopBtn").disabled=true;$("startBtn").disabled=false;if(roomRef&&fm){try{await fm.d.update(roomRef,{active:false,updatedAt:Date.now()})}catch(e){msg("shareStatus","توقف التتبع محلياً لكن تعذر تأكيد الإيقاف على الخادم.");return}}msg("shareStatus","تم إيقاف مشاركة الموقع.",true)};
-$("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText($("shareLink").value);$("copyBtn").textContent="تم النسخ ✓"}catch(e){$("shareLink").select();document.execCommand("copy")}};
-$("sendBtn").onclick=async()=>{try{if(navigator.share)await navigator.share({title:"رابط موقعي المباشر",text:"رابط مشاهدة موقعي الذي وافقت على مشاركته.",url:$("shareLink").value});else{await navigator.clipboard.writeText($("shareLink").value);msg("shareStatus","تم نسخ الرابط لإرساله للشخص الذي اخترته.",true)}}catch(e){if(e.name!=="AbortError")msg("shareStatus","تعذرت المشاركة؛ استخدم زر نسخ الرابط.")}};
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search),room=params.get("room");
+const map=L.map("map").setView([30.0444,31.2357],6);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
+let marker=null,watchId=null,fbApi=null,shareRef=null,shareActive=false;
+function status(id,message,kind){const el=$(id);el.textContent=message;el.className="status"+(kind?" "+kind:"")}
+function showPoint(lat,lng,label){const point=[lat,lng];map.setView(point,16);if(marker)marker.setLatLng(point);else marker=L.marker(point).addTo(map);marker.bindPopup(label)}
+function makeRoom(){const bytes=crypto.getRandomValues(new Uint8Array(16));return Array.from(bytes,x=>x.toString(16).padStart(2,"0")).join("")}
+async function firebase(){if(fbApi)return fbApi;const [appMod,authMod,dbMod]=await Promise.all([import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")]);const app=appMod.initializeApp(firebaseConfig);await authMod.signInAnonymously(authMod.getAuth(app));fbApi={db:dbMod.getDatabase(app),api:dbMod};return fbApi}
+function formatTime(value){return new Date(value).toLocaleString("ar-EG")}
+if(room){
+ $("startPanel").classList.add("hidden");$("viewerPanel").classList.remove("hidden");
+ $("mapHint").textContent="تعرض الخريطة آخر موقع أرسله صاحب المشاركة.";
+ (async()=>{try{const f=await firebase(),ref=f.api.ref(f.db,"sharedLocations/"+room);f.api.onValue(ref,snapshot=>{const data=snapshot.val();if(!data){status("viewerStatus","لم تصل بيانات موقع لهذه المشاركة بعد.","warn");return}if(data.active===false){status("viewerStatus","صاحب الموقع أوقف المشاركة.","warn");$("updatedAt").textContent=formatTime(data.updatedAt);return}if(Date.now()-data.updatedAt>120000){status("viewerStatus","آخر تحديث قديم؛ قد يكون الجهاز غير متصل أو الصفحة مغلقة.","warn")}else status("viewerStatus","المشاركة نشطة ويتم استقبال تحديثات الموقع.","good");showPoint(data.lat,data.lng,"الموقع الذي تمت مشاركته");$("updatedAt").textContent=formatTime(data.updatedAt);$("accuracy").textContent=Math.round(data.accuracy||0)+" متر";$("mapHint").textContent="إحداثيات الموقع تُعرض فقط أثناء مشاركة صاحب الجهاز لها."},error=>status("viewerStatus","تعذر قراءة المشاركة: "+error.message,"warn"))}catch(error){status("viewerStatus","تعذر الاتصال بالخدمة: "+error.message,"warn")}})();
+}
+$("startBtn").addEventListener("click",async()=>{
+ if(!$("consent").checked){status("shareStatus","يرجى تحديد الموافقة بعد قراءة التوضيح.","warn");return}
+ if(!navigator.geolocation){status("shareStatus","المتصفح لا يدعم تحديد الموقع.","warn");return}
+ if(!window.isSecureContext){status("shareStatus","افتح الموقع عبر HTTPS حتى يعمل تحديد الموقع بأمان.","warn");return}
+ if(shareActive)return;
+ $("startBtn").disabled=true;
+ try{
+  const f=await firebase(),id=makeRoom();shareRef=f.api.ref(f.db,"sharedLocations/"+id);
+  const url=new URL(location.href);url.searchParams.set("room",id);$("shareLink").value=url.toString();$("shareLinkPanel").classList.remove("hidden");
+  status("shareStatus","تم إنشاء رابط خاص. في انتظار موافقتك على نافذة الموقع في المتصفح...");
+  watchId=navigator.geolocation.watchPosition(async position=>{
+   const point={lat:position.coords.latitude,lng:position.coords.longitude,accuracy:position.coords.accuracy,updatedAt:Date.now(),active:true};
+   try{await f.api.set(shareRef,point);shareActive=true;$("stopBtn").disabled=false;showPoint(point.lat,point.lng,"موقعك الحالي");$("mapHint").textContent="أنت تشارك موقعك حالياً.";status("shareStatus","موقعك يُشارك الآن. استخدم زر إيقاف المشاركة لإنهائها.","good")}
+   catch(error){status("shareStatus","تعذر حفظ تحديث الموقع: "+error.message,"warn")}
+  },error=>{status("shareStatus","لم يتم الحصول على الموقع: "+error.message,"warn");stopLocal()}, {enableHighAccuracy:true,maximumAge:5000,timeout:20000});
+  await f.api.onDisconnect(shareRef).update({active:false,updatedAt:Date.now()});
+ }catch(error){status("shareStatus","تعذر بدء المشاركة: "+error.message,"warn");$("startBtn").disabled=false}
+});
+function stopLocal(){if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null}shareActive=false;$("stopBtn").disabled=true;$("startBtn").disabled=false}
+$("stopBtn").addEventListener("click",async()=>{
+ stopLocal();
+ if(shareRef&&fbApi){try{await fbApi.api.update(shareRef,{active:false,updatedAt:Date.now()});status("shareStatus","تم إيقاف مشاركة الموقع.","good")}catch(error){status("shareStatus","توقف تحديد الموقع على هذا الجهاز، لكن تعذر تأكيد الإيقاف على الخادم: "+error.message,"warn")}}
+ else status("shareStatus","تم إيقاف مشاركة الموقع.","good");
+});
+$("copyBtn").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("shareLink").value);$("copyBtn").textContent="تم النسخ ✓"}catch(error){$("shareLink").select();document.execCommand("copy");$("copyBtn").textContent="تم النسخ ✓"}});
+$("sendBtn").addEventListener("click",async()=>{try{if(navigator.share)await navigator.share({title:"رابط مشاهدة موقعي",text:"رابط مشاهدة موقعي الذي وافقت على مشاركته.",url:$("shareLink").value});else{await navigator.clipboard.writeText($("shareLink").value);status("shareStatus","تم نسخ الرابط. يمكنك إرساله للشخص الذي اخترته.","good")}}catch(error){if(error.name!=="AbortError")status("shareStatus","تعذرت المشاركة؛ استخدم زر نسخ الرابط.","warn")}});
 window.addEventListener("pagehide",()=>{if(watchId!==null)navigator.geolocation.clearWatch(watchId)});
-</script></body></html>
+</script>
+</body>
+</html>
