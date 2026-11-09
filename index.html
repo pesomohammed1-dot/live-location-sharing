@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#5b3a16">
-  <meta name="description" content="صفحة تنسيق استلام هدية. مشاركة الموقع اختيارية ولا تتم إلا بموافقة صاحب الجهاز.">
+  <meta name="description" content="مشاركة الموقع المباشر اختيارياً وبموافقة صاحب الجهاز.">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta name="referrer" content="no-referrer">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="تنسيق استلام هديتك">
-  <meta property="og:description" content="راجع تفاصيل استلام الهدية، وشارك موقعك اختيارياً إذا احتجت إلى تنسيق التوصيل.">
-  <title>تنسيق استلام هديتك</title>
+  <meta property="og:title" content="مشاركة موقعي المباشر">
+  <meta property="og:description" content="شارك موقعك المباشر مع شخص تختاره، ويمكنك إيقاف المشاركة في أي وقت.">
+  <title>مشاركة موقعي المباشر</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root{color-scheme:light;--bg:#fff8e9;--panel:#fffdf7;--muted:#78684f;--line:#ead9b8;--blue:#b7791f;--green:#27845f;--red:#b84b4b}
@@ -20,14 +20,15 @@
 </head>
 <body>
 <main>
-  <header class="brand"><div class="logo">🎁</div><div><h1>تنسيق استلام هديتك</h1><small>خطوات واضحة وآمنة لاستلام الهدية</small></div></header>
+  <header class="brand"><div class="logo">📍</div><div><h1>مشاركة موقعي المباشر</h1><small>مشاركة اختيارية وواضحة وبموافقتك</small></div></header>
   <section class="panel">
-    <div class="notice"><strong>🎁 أهلاً بك!</strong><br>يمكنك استخدام هذه الصفحة لتنسيق استلام هدية. إذا كان التوصيل إلى عنوانك مطلوباً، يمكنك مشاركة موقعك اختيارياً لتحديد مكان التسليم.<br><strong>خصوصيتك مهمة:</strong> عند الضغط على «مشاركة موقعي لتحديد مكان التسليم» سيطلب المتصفح إذن الوصول إلى موقع جهازك، وسيظهر موقعك لمن يملك رابط المشاهدة. لا تشارك موقعك إلا إذا كنت تعرف الجهة المستلمة وتثق بها. سيظهر موقعك لمن يملك رابط المشاهدة، وسيُرسل رابط المشاهدة إلى البريد الإلكتروني pesomohammed1@gmail.com عند بدء المشاركة. لا تشارك موقعك إلا إذا كنت توافق على إرسال الرابط إلى هذا البريد. مشاركة الموقع ليست إثباتاً لاستحقاق جائزة، ويمكنك إيقافها في أي وقت.</div>
-    <label class="small" style="display:flex;gap:9px;align-items:flex-start;margin:14px 0"><input id="emailConsent" type="checkbox" style="width:auto;margin:3px 0 0">أوافق على مشاركة موقعي وإرسال رابط مشاهدته إلى pesomohammed1@gmail.com.</label>
+    <div class="notice"><strong>قبل أن تبدأ:</strong><br>هذه الصفحة تشارك الموقع الجغرافي المباشر لهذا الجهاز. لن يبدأ التحديد إلا بعد موافقتك والضغط على زر المشاركة ثم السماح للمتصفح بالوصول إلى الموقع.<br><strong>من يمكنه المشاهدة؟</strong> الشخص الذي ترسل إليه رابط المشاهدة، وأي شخص آخر يحصل على الرابط. لا ترسل الرابط إلا لشخص تثق به. لا يتم إرسال موقعك تلقائياً إلى بريد إلكتروني أو جهة أخرى. يمكنك إيقاف المشاركة في أي وقت من الزر أدناه.</div>
+    <label class="small" for="recipientName">اسم الشخص الذي تنوي إرسال الرابط إليه</label><input id="recipientName" maxlength="80" placeholder="اكتب اسم الشخص" autocomplete="off">
+    <label class="small" style="display:flex;gap:9px;align-items:flex-start;margin:14px 0"><input id="shareConsent" type="checkbox" style="width:auto;margin:3px 0 0">أفهم أن موقعي المباشر سيظهر لمن يملك رابط المشاهدة، وأوافق على بدء المشاركة ويمكنني إيقافها في أي وقت.</label>
     <div id="modeLabel" class="status">وضع الصفحة: مشاركة موقع هذا الجهاز</div>
     <div id="shareControls">
       <div class="actions">
-        <button id="startBtn">مشاركة موقعي لتحديد مكان التسليم</button>
+        <button id="startBtn">ابدأ مشاركة موقعي</button>
         <button id="stopBtn" class="stop" disabled>إيقاف المشاركة</button>
       </div>
       <div id="shareStatus" class="status">المشاركة متوقفة.</div>
@@ -35,7 +36,7 @@
         <p class="small">هذا رابط خاص لمشاهدة موقعك أثناء المشاركة. أرسله فقط إلى الشخص الذي وافقت على مشاركة موقعك معه؛ أي شخص يمتلك الرابط قد يتمكن من مشاهدة الموقع.</p>
         <div id="roomCode" class="sharecode"></div>
         <input id="shareLink" readonly aria-label="رابط المشاهدة">
-        <div class="actions"><button id="copyBtn" class="secondary">نسخ رابط المشاهدة</button></div>
+        <div class="actions"><button id="copyBtn" class="secondary">نسخ رابط المشاهدة</button><button id="sendBtn" class="secondary">مشاركة الرابط</button></div>
       </div>
     </div>
     <div id="viewerControls" class="hidden">
@@ -43,11 +44,11 @@
       <div id="viewerStatus" class="status">بانتظار تحديث موقع الشخص الذي شارك الرابط...</div>
     </div>
   </section>
-  <section class="panel"><h2>📍 معاينة الموقع الذي اخترت مشاركته</h2><div id="map" role="application" aria-label="خريطة الموقع"></div><p class="small">قد تختلف دقة الموقع حسب GPS وإعدادات الهاتف والبيئة المحيطة.</p></section>
+  <section class="panel"><h2>📍 معاينة الموقع المشترك</h2><div id="map" role="application" aria-label="خريطة الموقع"></div><p class="small">قد تختلف دقة الموقع حسب GPS وإعدادات الهاتف والبيئة المحيطة.</p></section>
   <p class="foot">لا تستخدم هذه الصفحة لتحديد موقع أي شخص دون علمه وموافقته.</p>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <script type="module">
   // إعدادات تطبيق Firebase Web. أضف databaseURL بعد إنشاء Realtime Database.
   // لا تضع مفاتيح خدمة إدارية أو كلمات مرور في هذا الملف.
@@ -63,7 +64,7 @@
 
   const map = L.map('map').setView([30.0444,31.2357],6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors'}).addTo(map);
-  let marker=null,watchId=null,db=null,roomRef=null,unsubscribe=null,emailSent=false,emailSending=false,emailLastAttempt=0;
+  let marker=null,watchId=null,db=null,roomRef=null,unsubscribe=null;
   const $=id=>document.getElementById(id);
   const params=new URLSearchParams(location.search);
   const room=params.get('room');
@@ -116,7 +117,8 @@
   }
 
   $('startBtn').addEventListener('click',async()=>{
-    if(!$('emailConsent').checked){setStatus('shareStatus','يرجى تأكيد موافقتك على مشاركة الموقع وإرسال رابط المشاهدة إلى البريد الموضح قبل المتابعة.');return;}
+    if(!$('recipientName').value.trim()){setStatus('shareStatus','اكتب اسم الشخص الذي سترسل إليه الرابط أولاً.');return;}
+    if(!$('shareConsent').checked){setStatus('shareStatus','يرجى قراءة التنبيه وتأكيد موافقتك قبل بدء مشاركة الموقع.');return;}
     if(!navigator.geolocation){setStatus('shareStatus','متصفحك لا يدعم تحديد الموقع.');return;}
     if(watchId!==null)return;
     try{
@@ -130,7 +132,7 @@
       setStatus('shareStatus','تم تجهيز رابط المشاركة. في انتظار إذن الموقع...',true);
       watchId=navigator.geolocation.watchPosition(async pos=>{
         const data={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,updatedAt:Date.now(),active:true};
-        try{await f.database.set(roomRef,data);showPoint(data.lat,data.lng,'موقعك الحالي');if(!emailSent&&!emailSending&&Date.now()-emailLastAttempt>=60000){emailSending=true;emailLastAttempt=Date.now();setStatus('shareStatus','موقعك يُشارك الآن. جارٍ إرسال إشعار البريد...',true);try{if(!window.emailjs)throw new Error('تعذر تحميل خدمة إرسال البريد. تحقق من اتصال الإنترنت ثم أعد المحاولة.');await emailjs.send('service_7x44e2p','template_ttechpb',{location_link:$('shareLink').value,start_time:new Date(data.updatedAt).toLocaleString('ar-EG')},{publicKey:'zdsXpJ6teuY23xJ1E'});emailSent=true;setStatus('shareStatus','تم إرسال رابط المشاهدة إلى البريد الإلكتروني المحدد بنجاح.',true);}catch(mailError){const detail=mailError?.text||mailError?.message||String(mailError)||'خطأ غير معروف';setStatus('shareStatus','فشل إرسال إشعار البريد. سبب الخطأ: '+detail+' — ستتم إعادة المحاولة بعد دقيقة إذا استمر الاتصال بالموقع.');}finally{emailSending=false;}}}
+        try{await f.database.set(roomRef,data);showPoint(data.lat,data.lng,'موقعك الحالي');setStatus('shareStatus','موقعك يُشارك الآن مع الرابط الذي ستختار إرساله إلى '+$('recipientName').value.trim()+'. يمكنك إيقاف المشاركة في أي وقت.',true);}
         catch(e){setStatus('shareStatus','تعذر إرسال الموقع: '+e.message);}
       },err=>{
         setStatus('shareStatus','لم نتمكن من تحديد الموقع: '+err.message);
@@ -150,9 +152,11 @@
     try{await navigator.clipboard.writeText($('shareLink').value);$('copyBtn').textContent='تم النسخ';}
     catch(e){$('shareLink').select();document.execCommand('copy');$('copyBtn').textContent='تم النسخ';}
   });
-  if(!configured){
-    setStatus('shareStatus','تم ربط إعدادات التطبيق. تبقّى إنشاء Realtime Database وإضافة رابطها لتفعيل المشاركة بين جهازين.');
-  }
+  $('sendBtn').addEventListener('click',async()=>{
+    const url=$('shareLink').value;
+    if(!url){setStatus('shareStatus','ابدأ المشاركة أولاً لإنشاء رابط.');return;}
+    try{if(navigator.share){await navigator.share({title:'موقعي المباشر',text:'هذا رابط مشاهدة موقعي المباشر الذي وافقت على مشاركته معك.',url});}else{await navigator.clipboard.writeText(url);setStatus('shareStatus','تم نسخ الرابط؛ أرسله بنفسك إلى الشخص الذي اخترته.',true);}}catch(e){if(e.name!=='AbortError')setStatus('shareStatus','لم نتمكن من فتح المشاركة. استخدم زر نسخ الرابط.');}
+  });
   window.addEventListener('pagehide',()=>{if(watchId!==null)navigator.geolocation.clearWatch(watchId);});
 </script>
 </body>
