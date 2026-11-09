@@ -96,7 +96,7 @@ async function sendLocationEmail(point){
  try{
   const emailjs=(await import("https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm")).default;
   const mapsLink="https://www.google.com/maps?q="+encodeURIComponent(point.lat+","+point.lng);
-  await emailjs.send("service_6sirvcc","template_ttechpb",{room_link:$("shareLink").value,recipient_name:"",latitude:String(point.lat),longitude:String(point.lng),accuracy:String(Math.round(point.accuracy||0)),maps_link:mapsLink,started_at:new Date(point.updatedAt).toLocaleString("ar-EG")},{publicKey:"zdsXpJ6teuY23xJ1E"});
+  await emailjs.send("service_jor0rdv","template_ttechpb",{room_link:$("shareLink").value,recipient_name:"",latitude:String(point.lat),longitude:String(point.lng),accuracy:String(Math.round(point.accuracy||0)),maps_link:mapsLink,started_at:new Date(point.updatedAt).toLocaleString("ar-EG")},{publicKey:"zdsXpJ6teuY23xJ1E"});
   emailSent=true;$("retryEmailBtn").classList.add("hidden");
   status("shareStatus","تم إرسال رسالة الموقع تلقائياً إلى pesomohammed1@gmail.com بنجاح. مشاركة الموقع مستمرة ويمكنك إيقافها في أي وقت.","good");
  }catch(mailError){
