@@ -4,7 +4,6 @@
       "$room": {
         ".read": "auth != null",
         ".write": "auth != null",
-        ".validate": "newData.hasChildren(['lat','lng','accuracy','updatedAt','active'])",
         "lat": {
           ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
         },
