@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123b32">
+<meta name="description" content="مشاركة الموقع المباشر بموافقة واضحة ويمكن إيقافها في أي وقت.">
+<title>مشاركة موقعي بأمان</title>
+<style>
+:root{--ink:#18382f;--muted:#64766d;--gold:#c6a86a;--paper:#fffdf7;--bg:#f2eee4;--line:#e5dcc7}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:22px 14px;background:radial-gradient(ellipse at 50% 0,#e6ddc8,transparent 55%),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;display:grid;place-items:center}
+main{width:min(520px,100%)}.card{background:var(--paper);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 22px 60px #263c2e18}.cover{min-height:210px;padding:28px 22px;background:linear-gradient(145deg,#173f34,#285c49 60%,#b99b5e);color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}.icon{width:78px;height:78px;border:1px solid #ffffff70;border-radius:25px;background:#ffffff18;display:grid;place-items:center;font-size:38px;margin-bottom:15px}.cover h1{font-size:25px;margin:0 0 8px}.cover p{margin:0;color:#f4eee0;line-height:1.8;font-size:14px}.body{padding:24px}.intro{color:var(--muted);line-height:1.9;margin:0 0 18px;font-size:14px}.explain{background:#f5f0e4;border:1px solid #e3d6b7;padding:15px;border-radius:16px;line-height:1.9;font-size:14px}.explain strong{color:#765d2b}.row{display:flex;gap:10px;align-items:flex-start;margin:17px 0;line-height:1.8;font-size:14px}.row input{width:19px;height:19px;accent-color:#285c49;margin-top:4px;flex-shrink:0}button{width:100%;border:0;border-radius:14px;padding:14px 16px;font:inherit;font-weight:750;cursor:pointer}.primary{background:#245541;color:white}.secondary{background:#eee7d8;color:#314a3d;border:1px solid #d9cba9;margin-top:10px}.danger{background:#f5e6e2;color:#873e37;border:1px solid #e4c2bb;margin-top:10px}.hidden{display:none!important}.status{margin-top:15px;padding:13px;border:1px solid var(--line);border-radius:13px;background:#faf8f1;font-size:14px;line-height:1.8;overflow-wrap:anywhere}.status.good{background:#edf6ef;border-color:#a8cbb1;color:#24583a}.status.warn{background:#fbf3e2;border-color:#dfc58c;color:#76591e}.link{display:block;width:100%;padding:12px;margin-top:9px;border:1px solid #d9cba9;border-radius:10px;background:white;direction:ltr;text-align:left;font-size:12px;color:#294b3c}.foot{text-align:center;color:#7a887e;font-size:12px;line-height:1.8;padding:16px 10px}.tag{display:inline-block;border:1px solid #d9cba9;border-radius:30px;padding:5px 10px;color:#765d2b;font-size:12px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<main>
+<section class="card">
+<div class="cover">
+<div class="icon" aria-hidden="true">📍</div>
+<h1>مشاركة الموقع المباشر</h1>
+<p>شارك موقعك مع الشخص الذي تختاره، وبموافقتك فقط</p>
+</div>
+<div class="body">
+<span class="tag">مشاركة اختيارية</span>
+<p class="intro">اضغط على البطاقة لعرض التفاصيل. لن يتم طلب موقعك أو إرساله قبل موافقتك الواضحة، ثم موافقتك على نافذة الموقع التي يعرضها المتصفح.</p>
+<div id="introPanel">
+<button class="primary" id="showConsent">متابعة إلى إعداد المشاركة</button>
+</div>
+<div id="consentPanel" class="hidden">
+<div class="explain"><strong>قبل أن تبدأ، يُرجى معرفة الآتي:</strong><br>• عند الموافقة سيطلب المتصفح إذناً للوصول إلى موقع جهازك.<br>• إذا وافقت، سيُرسل موقعك الحالي وتحديثاته إلى رابط خاص يمكنك نسخه وإرساله للشخص المقصود.<br>• من يحصل على رابط المشاهدة يستطيع رؤية موقعك أثناء استمرار المشاركة.<br>• يمكنك إيقاف المشاركة من هذه الصفحة في أي وقت. يجب إبقاء الصفحة مفتوحة والاتصال بالإنترنت لتحديث الموقع.</div>
+<label class="row"><input type="checkbox" id="agree"><span>قرأت التوضيح وأوافق على مشاركة موقعي المباشر مع من أرسل إليه رابط المشاهدة.</span></label>
+<button class="primary" id="start" disabled>أوافق وأبدأ مشاركة موقعي</button>
+<button class="secondary" id="back">رجوع</button>
+</div>
+<div id="activePanel" class="hidden">
+<div class="status" id="status" role="status" aria-live="polite">جارٍ بدء المشاركة...</div>
+<div id="linkPanel" class="hidden">
+<p class="intro">انسخ الرابط التالي وأرسله للشخص الذي تريد أن يطّلع على موقعك.</p>
+<input class="link" id="shareLink" readonly aria-label="رابط مشاهدة الموقع">
+<button class="secondary" id="copy">نسخ رابط المشاهدة</button>
+</div>
+<button class="danger" id="stop" disabled>إيقاف مشاركة موقعي</button>
+</div>
+</div>
+</section>
+<footer class="foot">لا تتم مشاركة الموقع إلا بعد موافقتك وإذن المتصفح. لا ترسل رابط المشاهدة إلا إلى شخص تثق به.</footer>
+</main>
+<script type="module">
+const config={apiKey:"AIzaSyBXuD7D0ZFbJHj38Jj9GiWgAG4E0Vnn5x8",authDomain:"live-location-sharing-3fe64.firebaseapp.com",databaseURL:"https://live-location-sharing-3fe64-default-rtdb.firebaseio.com",projectId:"live-location-sharing-3fe64",storageBucket:"live-location-sharing-3fe64.firebasestorage.app",messagingSenderId:"79616209296",appId:"1:79616209296:web:1741481fbdbd8a5c5bc315"};
+const $=id=>document.getElementById(id);
+let firebaseApi=null,watchId=null,roomRef=null,active=false;
+function say(message,kind=""){const el=$("status");el.textContent=message;el.className="status"+(kind?" "+kind:"")}
+async function connect(){if(firebaseApi)return firebaseApi;const [app,auth,db]=await Promise.all([import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")]);const instance=app.initializeApp(config);await auth.signInAnonymously(auth.getAuth(instance));firebaseApi={db:db.getDatabase(instance),api:db};return firebaseApi}
+function newRoom(){const bytes=crypto.getRandomValues(new Uint8Array(24));return [...bytes].map(v=>v.toString(16).padStart(2,"0")).join("")}
+$("showConsent").onclick=()=>{$("introPanel").classList.add("hidden");$("consentPanel").classList.remove("hidden")};
+$("back").onclick=()=>{$("consentPanel").classList.add("hidden");$("introPanel").classList.remove("hidden")};
+$("agree").onchange=()=>{$("start").disabled=!$("agree").checked};
+$("start").onclick=async()=>{
+ if(!$("agree").checked)return;
+ if(!window.isSecureContext||!navigator.geolocation){$("activePanel").classList.remove("hidden");say("يلزم فتح الصفحة عبر HTTPS واستخدام متصفح يدعم تحديد الموقع.","warn");return}
+ $("consentPanel").classList.add("hidden");$("activePanel").classList.remove("hidden");$("start").disabled=true;
+ try{
+  const f=await connect(),id=newRoom();roomRef=f.api.ref(f.db,"sharedLocations/"+id);
+  const url=new URL(location.href);url.searchParams.set("room",id);$("shareLink").value=url.toString();
+  await f.api.onDisconnect(roomRef).update({active:false,updatedAt:Date.now()});
+  say("تم تجهيز رابطك. وافق الآن على نافذة إذن الموقع التي يعرضها المتصفح.");
+  watchId=navigator.geolocation.watchPosition(async pos=>{
+   const data={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,updatedAt:Date.now(),active:true};
+   try{await f.api.set(roomRef,data);active=true;$("linkPanel").classList.remove("hidden");$("stop").disabled=false;say("موقعك يُشارك الآن. أرسل رابط المشاهدة للشخص المقصود فقط، ويمكنك إيقاف المشاركة في أي وقت.","good")}
+   catch(err){say("تعذر إرسال تحديث الموقع: "+err.message,"warn")}
+  },async err=>{say("لم يتم الحصول على الموقع: "+err.message,"warn");stopWatch();if(roomRef&&firebaseApi){try{await firebaseApi.api.update(roomRef,{active:false,updatedAt:Date.now()})}catch(_){}}},{enableHighAccuracy:true,maximumAge:5000,timeout:20000});
+ }catch(err){say("تعذر بدء المشاركة. تحقق من اتصال الإنترنت وإعدادات الخدمة: "+err.message,"warn");$("start").disabled=false}
+};
+function stopWatch(){if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null}active=false;$("stop").disabled=true}
+$("stop").onclick=async()=>{stopWatch();try{if(roomRef&&firebaseApi)await firebaseApi.api.update(roomRef,{active:false,updatedAt:Date.now()});say("تم إيقاف مشاركة الموقع.","good")}catch(err){say("توقف تحديد الموقع على هذا الجهاز، لكن تعذر تحديث حالة المشاركة على الخادم: "+err.message,"warn")}};
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText($("shareLink").value);$("copy").textContent="تم نسخ الرابط ✓"}catch(_){$("shareLink").select();document.execCommand("copy");$("copy").textContent="تم نسخ الرابط ✓"}};
+window.addEventListener("pagehide",()=>{if(watchId!==null)navigator.geolocation.clearWatch(watchId)});
+</script>
+</body>
+</html>
