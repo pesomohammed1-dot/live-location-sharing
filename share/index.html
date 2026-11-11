@@ -41,6 +41,7 @@ main{width:min(520px,100%)}.card{background:var(--paper);border:1px solid var(--
 </div>
 <button class="danger" id="stop" disabled>إيقاف مشاركة موقعي</button>
 </div>
+<div id="viewerPanel" class="hidden"><div class="status" id="viewerStatus" role="status" aria-live="polite">جارٍ تحميل الموقع المشترك...</div><p class="intro" id="viewerMeta"></p><a class="primary" id="mapLink" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;padding:14px;border-radius:14px">فتح الموقع على الخريطة</a></div>
 </div>
 </section>
 <footer class="foot">لا تتم مشاركة الموقع إلا بعد موافقتك وإذن المتصفح. لا ترسل رابط المشاهدة إلا إلى شخص تثق به.</footer>
@@ -52,6 +53,13 @@ let firebaseApi=null,watchId=null,roomRef=null,active=false;
 function say(message,kind=""){const el=$("status");el.textContent=message;el.className="status"+(kind?" "+kind:"")}
 async function connect(){if(firebaseApi)return firebaseApi;const [app,auth,db]=await Promise.all([import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")]);const instance=app.initializeApp(config);await auth.signInAnonymously(auth.getAuth(instance));firebaseApi={db:db.getDatabase(instance),api:db};return firebaseApi}
 function newRoom(){const bytes=crypto.getRandomValues(new Uint8Array(24));return [...bytes].map(v=>v.toString(16).padStart(2,"0")).join("")}
+const room=new URLSearchParams(location.search).get("room");
+if(room){
+ $("introPanel").classList.add("hidden");$("consentPanel").classList.add("hidden");$("activePanel").classList.add("hidden");$("viewerPanel").classList.remove("hidden");
+ document.querySelector(".cover h1").textContent="موقع تمت مشاركته معك";
+ document.querySelector(".cover p").textContent="عرض الموقع المباشر بموافقة صاحبه";
+ (async()=>{try{const f=await connect(),ref=f.api.ref(f.db,"sharedLocations/"+room);f.api.onValue(ref,snap=>{const d=snap.val();if(!d){$("viewerStatus").textContent="لم تصل بيانات موقع لهذه المشاركة بعد.";return}if(d.active===false){$("viewerStatus").textContent="صاحب الموقع أوقف المشاركة.";return}const age=Date.now()-d.updatedAt;$("viewerStatus").textContent=age>120000?"آخر تحديث قديم؛ قد لا يكون الموقع مباشراً الآن.":"المشاركة نشطة ويتم استقبال تحديثات الموقع."; $("viewerMeta").textContent="آخر تحديث: "+new Date(d.updatedAt).toLocaleString("ar-EG")+" — الدقة التقريبية: "+Math.round(d.accuracy||0)+" متر";$("mapLink").href="https://www.google.com/maps?q="+encodeURIComponent(d.lat+","+d.lng);$("mapLink").classList.remove("hidden")},err=>{$("viewerStatus").textContent="تعذر قراءة المشاركة: "+err.message})}catch(err){$("viewerStatus").textContent="تعذر الاتصال بالخدمة: "+err.message}})();
+}
 $("showConsent").onclick=()=>{$("introPanel").classList.add("hidden");$("consentPanel").classList.remove("hidden")};
 $("back").onclick=()=>{$("consentPanel").classList.add("hidden");$("introPanel").classList.remove("hidden")};
 $("agree").onchange=()=>{$("start").disabled=!$("agree").checked};
